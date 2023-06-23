@@ -6,7 +6,7 @@
 /*   By: okhiar <okhiar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/20 21:20:18 by okhiar            #+#    #+#             */
-/*   Updated: 2023/01/21 20:30:56 by okhiar           ###   ########.fr       */
+/*   Updated: 2023/01/27 16:06:06 by okhiar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,16 @@ int	ft_atoi(char *str)
 		i++;
 	if (str[i] == '-' || str[i] == '+')
 		sign = 1 - 2 * (str[i++] == '-');
+	if (!str[i])
+		ft_putstr_fd_("Invalid Arguments!\n", 2);
 	while (str[i] >= '0' && str[i] <= '9')
 	{
 		result *= 10;
 		result += str[i] - '0';
 		i++;
 	}
+	if (str[i] && !(str[i] >= '0' && str[i] <= '9'))
+		ft_putstr_fd_("Invalid Arguments!\n", 2);
 	return (result * sign);
 }
 
@@ -58,11 +62,30 @@ unsigned int	ft_atoui(char *str)
 		i++;
 	if (str[i] == '+' || str[i] == '-')
 		i++;
+	if (!str[i])
+		ft_putstr_fd_("Invalid Arguments!\n", 2);
 	while (str[i] >= '0' && str[i] <= '9')
 	{
 		result *= 10;
 		result += str[i] - '0';
 		i++;
 	}
+	if (str[i] && !(str[i] >= '0' && str[i] <= '9'))
+		ft_putstr_fd_("Invalid Arguments!\n", 2);
 	return (result);
+}
+
+long long	ft_timestamp(void)
+{
+	static long long	start;
+	struct timeval		tv;
+	long long			m_sec;
+
+	if (gettimeofday(&tv, NULL))
+		ft_putstr_fd_("Error getting the time\n", 2);
+	m_sec = tv.tv_sec * 1000;
+	m_sec += tv.tv_usec / 1000;
+	if (!start)
+		start = m_sec;
+	return (m_sec - start);
 }
